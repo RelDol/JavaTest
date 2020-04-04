@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
+
 import vn.anhnhb.javatestapi.enumtype.StatusJob;
 
 /**
@@ -39,12 +42,14 @@ public class Work {
 	/**
 	 * work start date
 	 */
+	@JsonFormat(lenient = OptBoolean.FALSE)
 	@Column(name = "start_date", nullable = false)
 	private Date startDate;
 
 	/**
 	 * work end date
 	 */
+	@JsonFormat(lenient = OptBoolean.FALSE)
 	@Column(name = "end_date", nullable = false)
 	private Date endDate;
 

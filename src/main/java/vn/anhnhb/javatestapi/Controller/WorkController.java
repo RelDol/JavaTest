@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,9 +50,12 @@ public class WorkController {
 	 * handle add new work
 	 * @param wrk work information request from request
 	 * @return Object Work
+	 * @throws ApiException exception handle error
 	 */
 	@PostMapping("addwork")
-	public Work addWork(@Valid @RequestBody Work wrk) {
+	public Work addWork(@Valid @RequestBody Work wrk) throws ApiException {
+		//check data null
+		checkNull(wrk);
 		return workRepository.save(wrk);
 	}
 
@@ -131,5 +135,32 @@ public class WorkController {
 	private void validate(Integer workId) throws ApiException {
 		workInfo = workRepository.findById(workId)
 				.orElseThrow(() -> new ApiException("Job does not exist, Please try again with another job!"));
+	}
+
+	/**
+	 * check null Object request
+	 * @param Work object
+	 * @throws ApiException exception handle error
+	 */
+	private void checkNull(Work work) throws ApiException {
+		if (work != null) {
+			if (StringUtils.isEmpty(work.getWorkName())) {
+				throw new ApiException("Please input work name!");
+			}
+
+			if (StringUtils.isEmpty(work.getStartDate())) {
+				throw new ApiException("Please input work start date!");
+			}
+
+			if (StringUtils.isEmpty(work.getEndDate())) {
+				throw new ApiException("Please input work end date!");
+			}
+
+			if (StringUtils.isEmpty(work.getStatus())) {
+				throw new ApiException("Please input status work!");
+			}
+		} else {
+			throw new ApiException("Please input data");
+		}
 	}
 }
